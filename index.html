@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Elo Bank | Secure Online Banking</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Supabase JS -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      background: #f2f5f9;
+    }
+    .bank-logo {
+      color: #0a3cff;
+      font-weight: bold;
+    }
+    .card {
+      border-radius: 10px;
+    }
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="container py-5">
+
+<!-- LOGIN -->
+<div id="loginBox" class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card p-4 shadow">
+      <h2 class="text-center bank-logo">Elo Bank</h2>
+      <p class="text-center text-muted">Secure Online Banking</p>
+
+      <input type="email" id="email" class="form-control mb-3" placeholder="Email address">
+      <input type="password" id="password" class="form-control mb-3" placeholder="Password">
+
+      <button class="btn btn-primary w-100" onclick="login()">Log In</button>
+
+      <p id="loginError" class="text-danger mt-3 text-center"></p>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="bank-logo">Elo Bank Dashboard</h3>
+    <button class="btn btn-outline-danger btn-sm" onclick="logout()">Log out</button>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="card mb-3 p-3">
+    <h5>Profile</h5>
+    <div class="d-flex align-items-center gap-3">
+      <img id="profilePhoto" class="profile-img" />
+      <div>
+        <p class="mb-1"><strong>Name:</strong> <span id="fullName"></span></p>
+        <p class="mb-0"><strong>Nationality:</strong> <span id="nationality"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT INFO -->
+  <div class="card mb-3 p-3">
+    <h5>Account Information</h5>
+    <p><strong>Account Name:</strong> <span id="accountName"></span></p>
+    <p><strong>Account Number:</strong> <span id="accountNumber"></span></p>
+    <p><strong>Account Type:</strong> <span id="accountType"></span></p>
+    <p><strong>Status:</strong> <span id="accountStatus"></span></p>
+  </div>
+
+  <!-- BALANCE -->
+  <div class="card mb-3 p-3">
+    <h5>Balances</h5>
+    <p><strong>Available Balance:</strong> <span id="availableBalance"></span></p>
+    <p><strong>Ledger Balance:</strong> <span id="ledgerBalance"></span></p>
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div class="card mb-3 p-3">
+    <h5>Transactions</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="transactionsTable"></tbody>
+    </table>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="d-flex gap-2">
+    <button class="btn btn-secondary" onclick="blockedAction()">Withdraw</button>
+    <button class="btn btn-secondary" onclick="blockedAction()">Transfer</button>
+    <button class="btn btn-secondary" onclick="blockedAction()">Pay Bills</button>
+  </div>
+
+</div>
+
+<script>
+  // SUPABASE SETUP
+  const supabaseUrl = "https://hqxdgzspwjyevvhierys.supabase.co";
+  const supabaseKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnaHZzbnJ1YWF0em56Z2FieHF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyOTc4MzksImV4cCI6MjA4NTg3MzgzOX0.UDn8wtxHitMqvpAO2h38Ml3KtTDtQpTBVYa6OXCeVvU";
+
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function login() {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    loginError.textContent = "";
+
+    if (!email || !password) {
+      loginError.textContent = "Email and password are required.";
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("users_auth")
+      .select("*")
+      .eq("email", email)
+      .eq("password", password)
+      .single();
+
+    if (error || !data) {
+      loginError.textContent = "Invalid email or password.";
+      return;
+    }
+
+    localStorage.setItem("eloBankEmail", email);
+    loadDashboard(email);
+  }
+
+  async function loadDashboard(email) {
+    loginBox.classList.add("hidden");
+    dashboard.classList.remove("hidden");
+
+    const { data: profile } = await supabase
+      .from("customer_profiles")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (profile) {
+      profilePhoto.src = profile.profile_photo_url || "";
+      fullName.textContent = profile.full_name || "";
+      nationality.textContent = profile.nationality || "";
+    }
+
+    const { data: account } = await supabase
+      .from("bank_accounts")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (account) {
+      accountName.textContent = account.account_name || "";
+      accountNumber.textContent = account.account_number || "";
+      accountType.textContent = account.account_type || "";
+      accountStatus.textContent = account.account_status || "";
+    }
+
+    const { data: balance } = await supabase
+      .from("account_balances")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (balance) {
+      availableBalance.textContent = balance.available_balance || "";
+      ledgerBalance.textContent = balance.ledger_balance || "";
+    }
+
+    const { data: transactions } = await supabase
+      .from("transactions")
+      .select("*")
+      .eq("email", email)
+      .order("transaction_date", { ascending: false });
+
+    transactionsTable.innerHTML = "";
+    if (transactions) {
+      transactions.forEach(tx => {
+        transactionsTable.innerHTML += `
+          <tr>
+            <td>${tx.transaction_date || ""}</td>
+            <td>${tx.description || ""}</td>
+            <td>${tx.debit || ""}</td>
+            <td>${tx.credit || ""}</td>
+            <td>${tx.status || ""}</td>
+          </tr>
+        `;
+      });
+    }
+  }
+
+  function blockedAction() {
+    alert("To perform this action, please contact Elo Bank support or visit a physical branch.");
+  }
+
+  function logout() {
+    localStorage.removeItem("eloBankEmail");
+    location.reload();
+  }
+
+  const savedEmail = localStorage.getItem("eloBankEmail");
+  if (savedEmail) {
+    loadDashboard(savedEmail);
+  }
+</script>
+
+</body>
+</html>.
