@@ -2,36 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Elo Bank | Secure Online Banking</title>
+  <title>Elo Bank | Secure Banking</title>
 
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
 
-  <!-- Supabase JS -->
+  <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <style>
     body {
-      background: #f2f5f9;
+      background-color: #f2f5f9;
     }
-    .bank-logo {
+    .bank-name {
       color: #0a3cff;
       font-weight: bold;
     }
-    .card {
-      border-radius: 10px;
+    .hidden {
+      display: none;
     }
     .profile-img {
       width: 120px;
       height: 120px;
-      object-fit: cover;
       border-radius: 50%;
-    }
-    .hidden {
-      display: none;
+      object-fit: cover;
     }
   </style>
 </head>
@@ -42,15 +39,15 @@
 <div id="loginBox" class="row justify-content-center">
   <div class="col-md-5">
     <div class="card p-4 shadow">
-      <h2 class="text-center bank-logo">Elo Bank</h2>
+      <h2 class="text-center bank-name">Elo Bank</h2>
       <p class="text-center text-muted">Secure Online Banking</p>
 
-      <input type="email" id="email" class="form-control mb-3" placeholder="Email address">
-      <input type="password" id="password" class="form-control mb-3" placeholder="Password">
+      <input id="email" type="email" class="form-control mb-3" placeholder="Email address">
+      <input id="password" type="password" class="form-control mb-3" placeholder="Password">
 
       <button class="btn btn-primary w-100" onclick="login()">Log In</button>
 
-      <p id="loginError" class="text-danger mt-3 text-center"></p>
+      <p id="loginError" class="text-danger text-center mt-3"></p>
     </div>
   </div>
 </div>
@@ -59,24 +56,24 @@
 <div id="dashboard" class="hidden">
 
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="bank-logo">Elo Bank Dashboard</h3>
+    <h3 class="bank-name">Elo Bank Dashboard</h3>
     <button class="btn btn-outline-danger btn-sm" onclick="logout()">Log out</button>
   </div>
 
   <!-- PROFILE -->
-  <div class="card mb-3 p-3">
+  <div class="card p-3 mb-3">
     <h5>Profile</h5>
-    <div class="d-flex align-items-center gap-3">
-      <img id="profilePhoto" class="profile-img" />
+    <div class="d-flex gap-3 align-items-center">
+      <img id="profilePhoto" class="profile-img">
       <div>
-        <p class="mb-1"><strong>Name:</strong> <span id="fullName"></span></p>
-        <p class="mb-0"><strong>Nationality:</strong> <span id="nationality"></span></p>
+        <p><strong>Name:</strong> <span id="fullName"></span></p>
+        <p><strong>Nationality:</strong> <span id="nationality"></span></p>
       </div>
     </div>
   </div>
 
   <!-- ACCOUNT INFO -->
-  <div class="card mb-3 p-3">
+  <div class="card p-3 mb-3">
     <h5>Account Information</h5>
     <p><strong>Account Name:</strong> <span id="accountName"></span></p>
     <p><strong>Account Number:</strong> <span id="accountNumber"></span></p>
@@ -85,14 +82,14 @@
   </div>
 
   <!-- BALANCE -->
-  <div class="card mb-3 p-3">
+  <div class="card p-3 mb-3">
     <h5>Balances</h5>
-    <p><strong>Available Balance:</strong> <span id="availableBalance"></span></p>
-    <p><strong>Ledger Balance:</strong> <span id="ledgerBalance"></span></p>
+    <p><strong>Available:</strong> <span id="availableBalance"></span></p>
+    <p><strong>Ledger:</strong> <span id="ledgerBalance"></span></p>
   </div>
 
   <!-- TRANSACTIONS -->
-  <div class="card mb-3 p-3">
+  <div class="card p-3 mb-3">
     <h5>Transactions</h5>
     <table class="table table-striped">
       <thead>
@@ -108,7 +105,7 @@
     </table>
   </div>
 
-  <!-- ACTION BUTTONS -->
+  <!-- ACTIONS -->
   <div class="d-flex gap-2">
     <button class="btn btn-secondary" onclick="blockedAction()">Withdraw</button>
     <button class="btn btn-secondary" onclick="blockedAction()">Transfer</button>
@@ -118,14 +115,37 @@
 </div>
 
 <script>
-  // SUPABASE SETUP
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ELEMENTS
+  const loginBox = document.getElementById("loginBox");
+  const dashboard = document.getElementById("dashboard");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const loginError = document.getElementById("loginError");
+
+  const profilePhoto = document.getElementById("profilePhoto");
+  const fullName = document.getElementById("fullName");
+  const nationality = document.getElementById("nationality");
+
+  const accountName = document.getElementById("accountName");
+  const accountNumber = document.getElementById("accountNumber");
+  const accountType = document.getElementById("accountType");
+  const accountStatus = document.getElementById("accountStatus");
+
+  const availableBalance = document.getElementById("availableBalance");
+  const ledgerBalance = document.getElementById("ledgerBalance");
+  const transactionsTable = document.getElementById("transactionsTable");
+
+  // SUPABASE CONFIG
   const supabaseUrl = "https://hqxdgzspwjyevvhierys.supabase.co";
   const supabaseKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnaHZzbnJ1YWF0em56Z2FieHF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyOTc4MzksImV4cCI6MjA4NTg3MzgzOX0.UDn8wtxHitMqvpAO2h38Ml3KtTDtQpTBVYa6OXCeVvU";
 
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  async function login() {
+  // LOGIN
+  window.login = async function () {
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
     loginError.textContent = "";
@@ -149,8 +169,9 @@
 
     localStorage.setItem("eloBankEmail", email);
     loadDashboard(email);
-  }
+  };
 
+  // LOAD DASHBOARD
   async function loadDashboard(email) {
     loginBox.classList.add("hidden");
     dashboard.classList.remove("hidden");
@@ -207,26 +228,30 @@
             <td>${tx.debit || ""}</td>
             <td>${tx.credit || ""}</td>
             <td>${tx.status || ""}</td>
-          </tr>
-        `;
+          </tr>`;
       });
     }
   }
 
-  function blockedAction() {
-    alert("To perform this action, please contact Elo Bank support or visit a physical branch.");
-  }
-
-  function logout() {
+  // LOGOUT
+  window.logout = function () {
     localStorage.removeItem("eloBankEmail");
     location.reload();
-  }
+  };
 
+  // BLOCKED ACTIONS
+  window.blockedAction = function () {
+    alert("To perform this action, please contact Elo Bank support or visit a physical branch.");
+  };
+
+  // AUTO LOGIN
   const savedEmail = localStorage.getItem("eloBankEmail");
   if (savedEmail) {
     loadDashboard(savedEmail);
   }
+
+});
 </script>
 
 </body>
-</html>.
+</html>
