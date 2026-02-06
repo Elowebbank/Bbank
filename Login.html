@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GNL Bank Chicago – Premium Banking</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root{
+  --accent:#00d4b4;
+  --accent-dark:#00a38a;
+  --text-dark:#1a1a1a;
+  --text-light:#555;
+  --card:#fff;
+  --border:rgba(0,0,0,0.1);
+  --danger:#f85149;
+  --logo-bg:#00a38a;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;
+  background:#f2f4f8;
+  font-family:'Inter',sans-serif;
+  color:var(--text-dark);
+  overflow-x:hidden;
+}
+
+/* ================= LOGO ================= */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.logo a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--logo-bg);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+.logo-text {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+/* ================= LOGIN ================= */
+#login-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  animation:fadeIn 1s ease forwards;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.login-card{
+  width:100%;
+  max-width:400px;
+  background:#fff;
+  border-radius:16px;
+  padding:2rem;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  position:relative;
+  overflow:hidden;
+  animation:cardEnter 0.8s ease forwards;
+}
+@keyframes cardEnter{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+
+.login-card h1{text-align:center;color:var(--accent)}
+.subtitle{text-align:center;color:var(--text-light);margin:0.5rem 0 1.5rem}
+
+.form-group{margin-bottom:1.2rem}
+label{display:block;font-size:.85rem;color:var(--text-light);margin-bottom:.3rem}
+input{
+  width:100%;
+  padding:.8rem;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#f9f9f9;
+  color:var(--text-dark);
+}
+.password-wrap{position:relative}
+.toggle-password{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:1rem;
+  color:var(--text-light);
+}
+.toggle-password:hover{color:var(--accent)}
+
+#login-btn{
+  width:100%;
+  padding:.8rem;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:0.5rem;
+  transition:0.3s;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:0.5rem;
+}
+#login-btn:hover{ box-shadow:0 8px 25px rgba(0,212,180,.4); transform:translateY(-2px); }
+
+.spinner{
+  border:3px solid #f3f3f3;
+  border-top:3px solid #00d4b4;
+  border-radius:50%;
+  width:18px;
+  height:18px;
+  animation:spin 0.8s linear infinite;
+  display:none;
+}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+#login-error{margin-top:0.8rem;text-align:center;font-size:.85rem;color:var(--danger)}
+
+.login-links{
+  display:flex;
+  justify-content:space-between;
+  margin-top:0.8rem;
+  font-size:.85rem;
+}
+.login-links a{
+  color:var(--accent);
+  text-decoration:none;
+  cursor:pointer;
+}
+.login-links a:hover{ text-decoration:underline; }
+
+/* ================= DASHBOARD ================= */
+#dashboard{
+  display:none;
+  padding:1.5rem;
+  gap:1.5rem;
+  flex-direction:column;
+  animation:fadeIn 1s ease forwards;
+}
+
+/* Dashboard header */
+.dashboard-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:1.5rem;
+  background:#fff;
+  padding:1rem 1.2rem;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+.user-info{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.user-info img{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
+}
+.user-details{display:flex;flex-direction:column;}
+.user-details span{font-size:.85rem;color:var(--text-light)}
+.balance-container{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+.balance-container button{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:1.2rem;
+  color:var(--accent);
+}
+
+/* Feature Cards Horizontal Scroll */
+.feature-cards{
+  display:flex;
+  overflow-x:auto;
+  gap:1rem;
+  padding:0.5rem 0;
+  scroll-behavior:smooth;
+}
+.feature-cards::-webkit-scrollbar{height:8px;}
+.feature-cards::-webkit-scrollbar-thumb{ background:var(--accent); border-radius:4px; }
+.feature-card{
+  flex:0 0 90px;
+  background:#fff;
+  border-radius:16px;
+  padding:0.8rem;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  cursor:pointer;
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0.4rem;
+}
+.feature-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 12px 30px rgba(0,212,180,0.3);
+}
+.feature-card i{ font-size:1.4rem; color:var(--accent); }
+.feature-card h3{font-size:.8rem; color:var(--text-dark); text-align:center;}
+
+/* Table */
+.table-wrapper{
+  max-height:250px;
+  overflow-y:auto;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+table{width:100%;border-collapse:collapse;}
+th,td{padding:.8rem;border-bottom:1px solid var(--border);}
+th{color:var(--accent);}
+.amount{color:#00bfa5;font-weight:500;}
+.amount.negative{color:#f85149;font-weight:500;}
+
+/* Logout */
+#logout-btn{
+  padding:.8rem 1rem;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  color:#fff;⁷
+  font-weight:600;
+  cursor:pointer;
+  margin-top:1rem;
+  transition:0.3s;
+}
+#logout-btn:hover{ box-shadow:0 12px 35px rgba(0,212,180,.5); transform:translateY(-2px); }
+
+/* Modal */
+#modal{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:200;
+  animation:fadeIn 0.3s ease;
+}
+.modal-content{
+  background:#fff;
+  border-radius:16px;
+  padding:2rem;
+  text-align:center;
+  max-width:380px;
+  position:relative;
+  color:var(--text-dark);
+  animation:slideDown 0.3s ease;
+}
+@keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-content p{margin-bottom:1.5rem;}
+.modal-close{
+  position:absolute;
+  top:12px; right:12px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  color:var(--danger);
+  font-weight:bold;
+  font-size:1.3rem;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+
+    <!-- Logo -->
+    <div class="logo">
+      <a href="index.html">
+        <div class="logo-icon">G</div>
+        <div class="logo-text">GNL BANK</div>
+      </a>
+    </div>
+
+    
+    <p class="subtitle">Sign Into Your Account</p>
+
+    <div class="form-group">
+      <label></label>
+      <input id="email" type="email" placeholder="Email">
+    </div>
+
+    <div class="form-group password-wrap">
+      <label></label>
+      <input id="password" type="password" placeholder="Password">
+      <span class="toggle-password" id="togglePassword"><i class="fa fa-eye"></i></span>
+    </div>
+
+    <button id="login-btn">
+      <div class="spinner" id="spinner"></div>
+      Sign In Securely
+    </button>
+    <p id="login-error"></p>
+
+    <div class="login-links">
+      <a id="forgot-password">Forgot Password?</a>
+      <a id="create-account">Create Account</a>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+  <!-- Logo -->
+  <div class="logo">
+    <a href="index.html">
+      <div class="logo-icon">G</div>
+      <div class="logo-text">GNL BANK</div>
+    </a>
+  </div>
+
+  <div class="dashboard-header">
+    <div class="user-info">
+      <img src="https://i.pravatar.cc/50" alt="Profile">
+      <div class="user-details">
+        <strong id="welcome-text">****</strong>
+        <span id="account-id">Account ID: ****</span>
+      </div>
+    </div>
+    <div class="balance-container">
+      <strong id="balance">**</strong>
+      <button id="toggleBalance"><i class="fa fa-eye"></i></button>
+    </div>
+  </div>
+
+  <div class="feature-cards">
+    <div class="feature-card"><i class="fa fa-user"></i><h3>Profile</h3></div>
+    <div class="feature-card"><i class="fa fa-exchange-alt"></i><h3>Transfer</h3></div>
+    <div class="feature-card"><i class="fa fa-coins"></i><h3>Deposit</h3></div>
+    <div class="feature-card"><i class="fa fa-file-invoice"></i><h3>Bill Pay</h3></div>
+    <div class="feature-card"><i class="fa fa-credit-card"></i><h3>ATM Card</h3></div>
+    <div class="feature-card"><i class="fa fa-file-alt"></i><h3>Statements</h3></div>
+    <div class="feature-card"><i class="fa fa-hand-holding-usd"></i><h3>Loans</h3></div>
+    <div class="feature-card"><i class="fa fa-life-ring"></i><h3>Support</h3></div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th><th>Type</th><th>Amount</th><th>Description</th>
+        </tr>
+      </thead>
+      <tbody id="transactions-body"></tbody>
+    </table>
+  </div>
+
+  <button id="logout-btn">Sign Out</button>
+</div>
+
+<!-- Modal -->
+<div id="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">×</button>
+    <p id="modalMessage"></p>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const supabase = createClient(
+  'https://saeufvynqmqcatlseedb.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZXVmdnlucW1xY2F0bHNlZWRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMTg3MDYsImV4cCI6MjA4NTg5NDcwNn0.zYEb_smm9YGH4fRnfsMJcjZo00lFbkdBBsF1XdL3FaE'
+)
+
+const $ = id=>document.getElementById(id)
+let balanceVisible = true
+const spinner = $('spinner')
+
+// Password toggle
+$('togglePassword').onclick = ()=>{ 
+  const pw=$('password')
+  pw.type = pw.type==='password'?'text':'password' 
+}
+
+// Modal
+const modal=$('modal'), modalMsg=$('modalMessage'), modalClose=$('modalClose')
+function showModal(msg){ modalMsg.textContent=msg; modal.style.display='flex'}
+modalClose.onclick = ()=> modal.style.display='none'
+window.onclick = e=>{ if(e.target===modal) modal.style.display='none' }
+
+// Login links
+$('forgot-password').onclick = ()=> showModal("Please visit the bank or contact support@gnlbank.online")
+$('create-account').onclick = ()=> showModal("Please visit the bank or contact support@gnlbank.online")
+
+// Login
+$('login-btn').onclick = async ()=>{
+  $('login-error').textContent=''
+  spinner.style.display='inline-block'
+  const email=$('email').value.trim()
+  const password=$('password').value.trim()
+  if(!email||!password){ spinner.style.display='none'; $('login-error').textContent='Email & password required'; return }
+
+  const { data,error } = await supabase.auth.signInWithPassword({email,password})
+  spinner.style.display='none'
+  if(error){ $('login-error').textContent=error.message; return }
+  if(data?.user) loadDashboard(data.user)
+}
+
+// Dashboard
+async function loadDashboard(user){
+  $('login-screen').style.display='none'
+  $('dashboard').style.display='flex'
+
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('full_name, account_name, balance')
+    .eq('id', user.id)
+    .single()
+
+  if(error){ showModal('Profile not found'); return }
+
+  $('welcome-text').textContent = profile.full_name || 'Customer'
+  $('account-id').textContent = 'Account ID: ' + (profile.account_name||'12345678')
+  $('balance').dataset.realBalance = profile.balance || 0
+  $('balance').textContent = balanceVisible ? parseFloat(profile.balance||0).toLocaleString('en-US',{style:'currency',currency:'USD'}) : '••••••'
+
+  const { data: txs } = await supabase.from('transactions')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('transaction_date',{ascending:false})
+
+  $('transactions-body').innerHTML = txs?.length
+    ? txs.map(tx=>`<tr>
+        <td>${new Date(tx.transaction_date).toLocaleDateString()}</td>
+        <td>${tx.transaction_type}</td>
+        <td class="amount ${tx.amount<0?'negative':''}">${(tx.amount||0).toLocaleString('en-US',{style:'currency',currency:'USD'})}</td>
+        <td>${tx.narration||''}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="4">No transactions</td></tr>'
+}
+
+// Balance toggle
+$('toggleBalance').onclick = ()=>{
+  balanceVisible = !balanceVisible
+  $('balance').textContent = balanceVisible ? parseFloat($('balance').dataset.realBalance).toLocaleString('en-US',{style:'currency',currency:'USD'}) : '••••••'
+}
+
+// Feature cards
+document.querySelectorAll('.feature-card').forEach(card=>{
+  card.onclick = ()=> showModal("Account is locked. Unlock via bank visit or contact support@gnlbank.online")
+})
+
+// Logout
+$('logout-btn').onclick = async ()=>{
+  await supabase.auth.signOut()
+  location.reload()
+}
+
+// Auto-login
+supabase.auth.getSession().then(({data})=>{
+  if(data?.session?.user) loadDashboard(data.session.user)
+})
+</script>
+
+</body>
+</html>
