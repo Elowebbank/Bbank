@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNl Bank Chicago - Welcome</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Landing / Login Section -->
+  <div id="login-container">
+    <h1> GNl Bank</h1>
+    <p class="landing-msg">Please log in to access your account.</p>
+
+    <!-- Email Input -->
+    <input type="email" id="email" placeholder="Enter your email" />
+
+    <!-- Password Input -->
+    <div style="position: relative; width: 300px;">
+      <input type="password" id="password" placeholder="Enter your password" />
+      <span id="toggle-password">Show</span>
+    </div>
+
+    <!-- Login Button -->
+    <button id="login-btn">Login</button>
+
+    <!-- Login Error Message -->
+    <div id="login-error" class="error-text"></div>
+
+    <!-- New Account Info -->
+    <p class="new-account-msg">
+      To create a new account, please visit the nearest GNl Bank branch or send an email to <strong>customersupport@gnlonline.com</strong>
+    </p>
+  </div>
+
+  <!-- Dashboard Modal -->
+  <div id="dashboard-modal">
+    <div class="dashboard-header">
+      <h1 id="welcome-text">Welcome</h1>
+      <button id="logout-btn">Logout</button>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="user-info-card">
+        <p><strong>Account:</strong> <span id="account-name">Loading...</span></p>
+        <p><strong>Balance:</strong> <span id="balance">$0.00</span></p>
+      </div>
+
+      <div class="transaction-card">
+        <h3>Recent Transactions</h3>
+        <table id="transactions-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Narration</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner Overlay -->
+  <div id="spinner-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- External JS -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
