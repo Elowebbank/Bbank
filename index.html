@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G - Swiss Fintech Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --accent:#00d4b4;
+  --accent-dark:#00a38a;
+  --text-dark:#1a1a1a;
+  --text-light:#555;
+  --card:#fff;
+  --border:rgba(0,0,0,0.1);
+  --danger:#f85149;
+  --logo-bg:#00a38a;
+}
+
+/* Reset */
+*{margin:0;padding:0;box-sizing:border-box}
+html, body{
+  font-family:'Inter',sans-serif;
+  background:#f5f7fa;
+  color:var(--text-dark);
+  width:100%;
+  overflow-x:hidden;
+}
+
+a{text-decoration:none;color:var(--accent);}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1.2rem 3rem;
+  background:#fff;
+  box-shadow:0 4px 20px rgba(0,0,0,0.1);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{display:flex;align-items:center;gap:0.7rem;}
+.logo-icon{
+  width:50px;height:50px;
+  background:var(--logo-bg);
+  color:#fff;
+  font-weight:bold;
+  font-size:1.5rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:12px;
+}
+.logo-text{font-weight:700;font-size:1.4rem;color:var(--accent);}
+
+nav a{
+  margin-left:2rem;
+  font-weight:600;
+  color:var(--text-dark);
+  transition:.3s;
+}
+nav a:hover{color:var(--accent-dark);}
+
+.hero{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding:5rem 2rem;
+  background:linear-gradient(to right,var(--accent),var(--accent-dark));
+  color:#fff;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+}
+
+.hero h1{font-size:2.6rem;font-weight:700;margin-bottom:1rem;}
+.hero p{font-size:1.15rem;margin-bottom:2rem;line-height:1.6;}
+.hero a{
+  padding:1rem 2.5rem;
+  background:#fff;
+  color:var(--accent-dark);
+  border-radius:12px;
+  font-weight:700;
+  font-size:1rem;
+  transition:.3s;
+}
+.hero a:hover{background:var(--accent-dark);color:#fff;}
+
+.features{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1.5rem;
+  padding:3rem;
+  justify-content:center;
+}
+
+.feature-card{
+  flex:1 1 280px;
+  background:#fff;
+  border-radius:20px;
+  padding:2rem;
+  box-shadow:0 15px 40px rgba(0,0,0,0.07);
+  transition:0.4s;
+  cursor:pointer;
+}
+.feature-card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 25px 60px rgba(0,212,180,0.25);
+}
+.feature-card i{
+  font-size:2.5rem;
+  color:var(--accent);
+  margin-bottom:1rem;
+  display:block;
+}
+
+.feature-card h3{
+  font-size:1.2rem;
+  font-weight:700;
+  margin-bottom:.8rem;
+}
+
+.feature-card p{
+  color:var(--text-light);
+  font-size:.95rem;
+  line-height:1.5;
+}
+
+/* Footer */
+.footer{
+  background:#fff;
+  padding:3rem 2rem;
+  text-align:center;
+  margin-top:3rem;
+  box-shadow:0 -5px 20px rgba(0,0,0,0.05);
+  font-size:.95rem;
+}
+.footer a{color:var(--accent-dark);}
+
+/* Responsive adjustments */
+@media(max-width:992px){
+  .features{padding:2rem;gap:1rem;}
+  .feature-card{flex:1 1 45%;}
+}
+
+@media(max-width:768px){
+  header{padding:1rem 1.5rem;}
+  .hero{padding:4rem 1rem;}
+  nav a{margin-left:1rem;}
+  .features{flex-direction:column;align-items:center;}
+  .feature-card{flex:1 1 100%;}
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">G</div>
+    <div class="logo-text"><a href="index.html">GNL BANK</a></div>
+  </div>
+  <nav>
+    <a href="3index.html">Login</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Welcome to GNL BANK</h1>
+  <p>Established in 2017, we provide secure, global, and innovative digital banking solutions for personal and corporate clients. Manage multiple currencies, invest, and save with ease.</p>
+  <a href="login.html">Access Your Account</a>
+</section>
+
+<section class="features">
+  <div class="feature-card"><i class="fa fa-coins"></i><h3>Multi-Currency Accounts</h3><p>Hold USD, EUR, CHF and more in a single account.</p></div>
+  <div class="feature-card"><i class="fa fa-exchange-alt"></i><h3>Foreign Exchange</h3><p>Fast and secure currency exchange at competitive rates.</p></div>
+  <div class="feature-card"><i class="fa fa-piggy-bank"></i><h3>Smart Savings</h3><p>Automatic savings plans with flexible interest options.</p></div>
+  <div class="feature-card"><i class="fa fa-chart-line"></i><h3>Investments</h3><p>Portfolio management and low-risk investment solutions.</p></div>
+  <div class="feature-card"><i class="fa fa-credit-card"></i><h3>Digital Cards</h3><p>Virtual and physical debit/credit cards for global spending.</p></div>
+  <div class="feature-card"><i class="fa fa-lock"></i><h3>Secure Banking</h3><p>Top-level encryption and fraud protection on all accounts.</p></div>
+  <div class="feature-card"><i class="fa fa-hand-holding-usd"></i><h3>Loans & Credit</h3><p>Flexible lending solutions with transparent rates.</p></div>
+  <div class="feature-card"><i class="fa fa-life-ring"></i><h3>Premium Support</h3><p>24/7 assistance from banking experts.</p></div>
+</section>
+
+<section class="features">
+  <div class="feature-card"><i class="fa fa-mobile-alt"></i><h3>Mobile Banking App</h3><p>Bank anytime, anywhere with our secure app.</p></div>
+  <div class="feature-card"><i class="fa fa-shield-alt"></i><h3>Fraud Protection</h3><p>Real-time monitoring and alerts to protect your funds.</p></div>
+  <div class="feature-card"><i class="fa fa-globe"></i><h3>Global Payments</h3><p>Send and receive funds internationally in seconds.</p></div>
+  <div class="feature-card"><i class="fa fa-cogs"></i><h3>API & Fintech Tools</h3><p>Integrate your business systems and automate payments.</p></div>
+</section>
+
+<footer class="footer">
+  <p>© 2026 GNL BANK Switzerland. All Rights Reserved. | Support: <a href="mailto:support@gnlbank.online">support@gnlbank.online</a></p>
+</footer>
+
+</body>
+</html>
