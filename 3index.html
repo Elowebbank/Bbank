@@ -1,0 +1,88 @@
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+<title>GNL Bank Chicago – Premium Banking</title>  <link rel="preconnect" href="https://fonts.googleapis.com">  
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>  
+<link rel="stylesheet" href="3html.css">  </head>  
+<body>  <!-- LOGIN -->  <div id="login-screen">  
+  <div class="login-card">  
+    <div class="logo">  
+      <a href="index.html">  
+        <div class="logo-icon">G</div>  
+        <div class="logo-text">GNL BANK</div>  
+      </a>  
+    </div>  
+    <p class="subtitle">Sign Into Your Account</p>  
+    <div class="form-group">  
+      <label></label>  
+      <input id="email" type="email" placeholder="Email">  
+    </div>  
+    <div class="form-group password-wrap">  
+      <label></label>  
+      <input id="password" type="password" placeholder="Password">  
+      <span class="toggle-password" id="togglePassword"><i class="fa fa-eye"></i></span>  
+    </div>  
+    <button id="login-btn">  
+      <div class="spinner" id="spinner"></div>  
+      Sign In Securely  
+    </button>  
+    <p id="login-error"></p>  
+    <div class="login-links">  
+      <a id="forgot-password">Forgot Password?</a>  
+      <a id="create-account">Create Account</a>  
+    </div>  
+  </div>  
+</div>  <!-- DASHBOARD -->  <div id="dashboard">  
+  <div class="logo">  
+    <a href="index.html">  
+      <div class="logo-icon">G</div>  
+      <div class="logo-text">GNL BANK</div>  
+    </a>  
+  </div>    <div class="dashboard-header">  
+    <div class="user-info">  
+      <img id="user-avatar" src="" alt="Profile">  
+      <div class="user-details">  
+        <strong id="welcome-text">****</strong>  
+        <span id="account-id">Account ID: ****</span>  
+      </div>  
+    </div>  
+    <div class="balance-container">  
+      <span class="balance-label"><center>Balance:</center></span>  
+      <strong id="balance">**</strong>  
+      <button id="toggleBalance"><i class="fa fa-eye"></i></button>  
+    </div>  
+  </div>    <div class="feature-cards">  
+    <div class="feature-card"><i class="fa fa-user"></i><h3>Profile</h3></div>  
+    <div class="feature-card"><i class="fa fa-exchange-alt"></i><h3>Transfer</h3></div>  
+    <div class="feature-card"><i class="fa fa-coins"></i><h3>Deposit</h3></div>  
+    <div class="feature-card"><i class="fa fa-file-invoice"></i><h3>Bill Pay</h3></div>  
+    <div class="feature-card"><i class="fa fa-credit-card"></i><h3>ATM Card</h3></div>  
+    <div class="feature-card"><i class="fa fa-file-alt"></i><h3>Statements</h3></div>  
+    <div class="feature-card"><i class="fa fa-hand-holding-usd"></i><h3>Loans</h3></div>  
+    <div class="feature-card"><i class="fa fa-life-ring"></i><h3>Support</h3></div>  
+  </div>    <div class="table-wrapper">  
+    <table>  
+      <thead>  
+        <tr>  
+          <th>Date</th><th>Type</th><th>Amount</th><th>Description</th><th>Action</th>  
+        </tr>  
+      </thead>  
+      <tbody id="transactions-body"></tbody>  
+    </table>  
+  </div>  <button id="logout-btn">Sign Out</button>
+
+</div>  <!-- Modal -->  <div id="modal">  
+  <div class="modal-content">  
+    <button class="modal-close" id="modalClose">×</button>  
+    <p id="modalMessage"></p>  
+  </div>  
+</div>  <script type="module" src="script.js"></script> 
+  
+<!-- Contact Us Floating Icon -->
+<div id="contact-us-btn" title="Contact Us">
+  <i class="fa fa-envelope"></i>
+</div></body>  
+</html>  
