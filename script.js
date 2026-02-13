@@ -17,18 +17,14 @@ $('togglePassword').onclick = () => {
   pw.type = pw.type === 'password' ? 'text' : 'password'
 }
 
-// ---------------- MODAL ----------------
+// ---------------- CINEMATIC MODAL ----------------
 const modal = $('modal')
 const modalMsg = $('modalMessage')
 const modalClose = $('modalClose')
 
-function showModal(message) {
-  modalMsg.textContent = message
-  modal.style.display = 'flex'
-}
-
-function showModalHTML(html) {
-  modalMsg.innerHTML = html
+function showModal(message, type = 'info') {
+  modalMsg.innerHTML = message
+  modal.className = `modal cinematic ${type}` // cinematic theme: info | alert | warning | error | locked
   modal.style.display = 'flex'
 }
 
@@ -37,10 +33,16 @@ window.onclick = e => { if (e.target === modal) modal.style.display = 'none' }
 
 // ---------------- LOGIN LINKS ----------------
 $('forgot-password').onclick = () =>
-  showModal('Please visit the bank or contact support@gnlbank.online')
+  showModal(
+    'Forgot your password? 📧 <strong>support@fundfort.online</strong> is ready to assist you securely.',
+    'alert'
+  )
 
 $('create-account').onclick = () =>
-  showModal('Please visit the bank or contact support@gnlbank.online')
+  showModal(
+    'Want to join FundFort? Contact 📧 <strong>support@fundfort.online</strong> or visit a branch for verification.',
+    'alert'
+  )
 
 // ---------------- LOGIN ----------------
 $('login-btn').onclick = async () => {
@@ -52,7 +54,7 @@ $('login-btn').onclick = async () => {
 
   if (!email || !password) {
     spinner.style.display = 'none'
-    $('login-error').textContent = 'Email & password required'
+    $('login-error').textContent = 'Email and password are required.'
     return
   }
 
@@ -60,7 +62,10 @@ $('login-btn').onclick = async () => {
   spinner.style.display = 'none'
 
   if (error) {
-    $('login-error').textContent = error.message
+    showModal(
+      '⚠️ Login failed. Your account may be temporarily locked. Contact 📧 <strong>support@fundfort.online</strong> for immediate assistance.',
+      'error'
+    )
     return
   }
 
@@ -72,18 +77,15 @@ async function loadDashboard(user) {
   $('login-screen').style.display = 'none'
   $('dashboard').style.display = 'flex'
 
-  // Enable Contact Us ONLY after login
-  initContactUs()
-
-  // Load profile
-  const { data: profile, error } = await supabase
+  // --- Load Profile ---
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('full_name, account_name, balance')
     .eq('id', user.id)
     .single()
 
-  if (error) {
-    showModal('Profile not found')
+  if (profileError) {
+    showModal('Profile not found. Contact 📧 <strong>support@fundfort.online</strong>.', 'error')
     return
   }
 
@@ -91,29 +93,27 @@ async function loadDashboard(user) {
   $('account-id').textContent = 'Account ID: ' + (profile.account_name || '12345678')
 
   $('balance').dataset.realBalance = profile.balance || 0
-  $('balance').textContent = parseFloat(profile.balance || 0)
-    .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+  $('balance').textContent = formatCurrency(profile.balance || 0)
 
-  // Avatar
+  // --- Load Avatar ---
   const avatarExtensions = ['jpg', 'jpeg', 'png', 'webp']
   let avatarSet = false
 
   for (const ext of avatarExtensions) {
     const path = `${user.id}.${ext}`
-    const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+    const { data: avatarData } = supabase.storage.from('avatars').getPublicUrl(path)
     const img = new Image()
-    img.src = data.publicUrl
+    img.src = avatarData.publicUrl
     img.onload = () => {
       if (!avatarSet) {
-        $('user-avatar').src = data.publicUrl
+        $('user-avatar').src = avatarData.publicUrl
         avatarSet = true
       }
     }
   }
+  if (!avatarSet) $('user-avatar').src = ''
 
-  if (!avatarSet) $('user-avatar').src = 'https://i.pravatar.cc/50'
-
-  // Transactions
+  // --- Load Transactions ---
   const { data: txs } = await supabase
     .from('transactions')
     .select('*')
@@ -124,22 +124,24 @@ async function loadDashboard(user) {
     ? txs.map(tx => {
         const isNeg = parseFloat(tx.amount) < 0
         return `
-        <tr>
+        <tr class="tx-row ${isNeg ? 'debit' : 'credit'}">
           <td>${new Date(tx.transaction_date).toLocaleDateString()}</td>
           <td>${tx.transaction_type}</td>
-          <td class="${isNeg ? 'red' : 'green'}">
-            ${tx.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-          </td>
+          <td class="${isNeg ? 'red' : 'green'}">${formatCurrency(tx.amount)}</td>
           <td>${tx.narration || ''}</td>
           <td><a href="#" class="print-link">Print Receipt</a></td>
         </tr>`
       }).join('')
-    : '<tr><td colspan="5">No transactions</td></tr>'
+    : '<tr><td colspan="5">No transactions yet. For support, contact 📧 <strong>support@fundfort.online</strong></td></tr>'
 
+  // --- Print Receipt ---
   document.querySelectorAll('.print-link').forEach(link => {
     link.onclick = e => {
       e.preventDefault()
-      showModal('Receipt unavailable. Please visit the bank or contact support@gnlbank.online')
+      showModal(
+        'Receipt not available online. Kindly visit a branch or contact 📧 <strong>support@fundfort.online</strong>.',
+        'warning'
+      )
     }
   })
 }
@@ -148,35 +150,26 @@ async function loadDashboard(user) {
 $('toggleBalance').onclick = () => {
   balanceVisible = !balanceVisible
   $('balance').textContent = balanceVisible
-    ? parseFloat($('balance').dataset.realBalance)
-        .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+    ? formatCurrency($('balance').dataset.realBalance)
     : '••••••'
 }
 
 // ---------------- FEATURE CARDS ----------------
 document.querySelectorAll('.feature-card').forEach(card => {
   card.onclick = () =>
-    showModal('Account is locked. Visit the bank or contact support@gnlbank.online')
+    showModal(
+      '🚫 Feature Locked: Contact 📧 <strong>support@fundfort.online</strong> for immediate access.',
+      'locked'
+    )
 })
-
-// ---------------- CONTACT US (DASHBOARD ONLY) ----------------
-function initContactUs() {
-  const contactBtn = document.getElementById('contact-us-btn')
-  if (!contactBtn) return
-
-  contactBtn.style.display = 'flex'
-
-  contactBtn.onclick = () => {
-    showModalHTML(`
-      <strong>Need help?</strong><br><br>
-      📧 Email: 
-      <a href="mailto:support@gnlbank.online">support@gnlbank.online</a><br><br>
-  `)
-  }
-}
 
 // ---------------- LOGOUT ----------------
 $('logout-btn').onclick = async () => {
   await supabase.auth.signOut()
   location.reload()
+}
+
+// ---------------- HELPERS ----------------
+function formatCurrency(amount) {
+  return parseFloat(amount || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 }
